@@ -21,14 +21,33 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://rayhanshakib.dev'),
   title: 'Md. Abu Rayhan (Shakib) | Full Stack Developer',
   description: 'Portfolio of Md. Abu Rayhan (Shakib), Full Stack Developer specializing in Next.js, React.js, Node.js, Express, PostgreSQL, Prisma, and Tailwind CSS.',
   keywords: [
     'Md. Abu Rayhan', 'Shakib', 'Full Stack Developer',
     'Next.js', 'React.js', 'Node.js', 'PostgreSQL',
     'Prisma', 'Tailwind CSS', 'TypeScript', 'Dhaka Bangladesh',
+    'rayhanshakib.dev',
   ],
+  alternates: {
+    canonical: 'https://rayhanshakib.dev',
+  },
+  openGraph: {
+    title: 'Md. Abu Rayhan (Shakib) | Full Stack Developer',
+    description: 'Portfolio of Md. Abu Rayhan (Shakib), Full Stack Developer specializing in Next.js, React.js, Node.js, Express, PostgreSQL, Prisma, and Tailwind CSS.',
+    url: 'https://rayhanshakib.dev',
+    siteName: 'rayhanshakib.dev',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Md. Abu Rayhan (Shakib) | Full Stack Developer',
+    description: 'Portfolio of Md. Abu Rayhan (Shakib), Full Stack Developer specializing in Next.js, React.js, Node.js, Express, PostgreSQL, Prisma, and Tailwind CSS.',
+  },
 };
+
 
 export default function RootLayout({
   children,

@@ -49,7 +49,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative pt-32 pb-24 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[92vh] flex flex-col justify-center"
+      className="relative pt-24 pb-6 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-screen max-h-screen flex flex-col justify-center"
     >
       {/* ── Background ambient orbs ── */}
       <div
@@ -67,7 +67,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 items-center">
         {/* ═══ LEFT COLUMN — Text ═══ */}
         <motion.div
           variants={stagger}
@@ -76,9 +76,9 @@ export function HeroSection() {
           className="max-w-2xl"
         >
           {/* Status Badge */}
-          <motion.div variants={fadeUp} className="mb-7">
+          <motion.div variants={fadeUp} className="mb-4">
             <span
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono font-semibold"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-mono font-semibold"
               style={{
                 background: 'rgba(16, 185, 129, 0.08)',
                 border: '1px solid rgba(16, 185, 129, 0.25)',
@@ -102,7 +102,7 @@ export function HeroSection() {
           {/* Name */}
           <motion.p
             variants={fadeUp}
-            className="text-sm font-mono font-medium mb-3"
+            className="text-sm font-mono font-medium mb-1.5"
             style={{ color: 'var(--text-muted)' }}
           >
             Hi there, I'm
@@ -111,7 +111,7 @@ export function HeroSection() {
           {/* Main Headline */}
           <motion.h1
             variants={fadeUp}
-            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-3"
+            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-2"
             style={{ color: 'var(--text-primary)' }}
           >
             {resumeData.name.split('(')[0].trim()}
@@ -120,7 +120,7 @@ export function HeroSection() {
           {/* Dynamic Subtitle */}
           <motion.div
             variants={fadeUp}
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-7"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4"
           >
             <span className="gradient-text">{displayed}</span>
             <span
@@ -131,7 +131,7 @@ export function HeroSection() {
               }}
             />
             <span
-              className="block text-2xl sm:text-3xl font-bold mt-1"
+              className="block text-2xl sm:text-3xl font-bold mt-0.5"
               style={{ color: 'var(--text-secondary)' }}
             >
               Developer
@@ -141,7 +141,7 @@ export function HeroSection() {
           {/* Bio */}
           <motion.p
             variants={fadeUp}
-            className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
+            className="text-base sm:text-lg leading-relaxed mb-4 max-w-xl"
             style={{ color: 'var(--text-secondary)' }}
           >
             {resumeData.bio}
@@ -150,7 +150,7 @@ export function HeroSection() {
           {/* Location */}
           <motion.div
             variants={fadeUp}
-            className="flex items-center gap-1.5 text-xs font-mono mb-8"
+            className="flex items-center gap-1.5 text-xs font-mono mb-4"
             style={{ color: 'var(--text-muted)' }}
           >
             <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--accent-cyan)' }} />
@@ -158,7 +158,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Tech Pills */}
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-10">
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-6">
             {resumeData.topSkillsPills?.map((tech, i) => (
               <motion.span
                 key={tech}
