@@ -64,8 +64,19 @@ export function Navbar() {
           >
             <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
           </div>
-          <span className="group-hover:text-accent-violet2 transition-colors" style={{ color: 'var(--text-primary)' }}>
-            shakib.dev
+          <span className="group-hover:text-accent-violet2 transition-colors font-mono" style={{ color: 'var(--text-primary)' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>rayhan</span><span style={{ color: 'var(--text-primary)' }}>shakib</span><span style={{ color: '#7C3AED' }}>.dev</span>
+          </span>
+          <span
+            className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md"
+            style={{
+              background: 'rgba(124,58,237,0.12)',
+              border: '1px solid rgba(124,58,237,0.25)',
+              color: '#7C3AED',
+              letterSpacing: '0.05em',
+            }}
+          >
+            v1.0.0
           </span>
         </Link>
 
