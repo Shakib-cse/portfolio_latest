@@ -295,7 +295,7 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
         {/* Previous & Next Case Study Navigation */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16 pt-6 border-t border-slate-200/60 dark:border-slate-800/60">
           <Link
-            href={`/projects/${prevProject.slug}/`}
+            href={`/projects/${prevProject.slug}`}
             prefetch={true}
             className="glass-panel p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 group hover:border-indigo-500/50 transition-all flex flex-col justify-between"
           >
@@ -309,7 +309,7 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
           </Link>
 
           <Link
-            href={`/projects/${nextProject.slug}/`}
+            href={`/projects/${nextProject.slug}`}
             prefetch={true}
             className="glass-panel p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 group hover:border-indigo-500/50 transition-all flex flex-col justify-between sm:items-end sm:text-right"
           >
@@ -343,7 +343,7 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
               {otherProjects.map((other) => (
                 <Link
                   key={other.id}
-                  href={`/projects/${other.slug}/`}
+                  href={`/projects/${other.slug}`}
                   prefetch={true}
                   className="glass-panel p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 group hover:border-indigo-500/50 transition-all flex flex-col justify-between"
                 >
