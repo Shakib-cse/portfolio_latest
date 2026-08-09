@@ -46,6 +46,15 @@ export const metadata: Metadata = {
     title: 'Md. Abu Rayhan (Shakib) | Full Stack Developer',
     description: 'Portfolio of Md. Abu Rayhan (Shakib), Full Stack Developer specializing in Next.js, React.js, Node.js, Express, PostgreSQL, Prisma, and Tailwind CSS.',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 
