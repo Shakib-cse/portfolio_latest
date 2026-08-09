@@ -129,7 +129,7 @@ export function ProjectsGrid({ projects, categories, totalCount, domainCount }: 
               {/* Image */}
               {project.imageUrl && (
                 <Link
-                  href={`/projects/${project.slug}`}
+                  href={`/projects/${project.slug}/`}
                   className="block relative overflow-hidden"
                   style={{ height: 196 }}
                 >
@@ -168,7 +168,7 @@ export function ProjectsGrid({ projects, categories, totalCount, domainCount }: 
                 </div>
 
                 <h2 className="text-base font-bold mb-2 leading-snug" style={{ color: 'var(--text-primary)' }}>
-                  <Link href={`/projects/${project.slug}`} className="hover:underline underline-offset-2">
+                  <Link href={`/projects/${project.slug}/`} className="hover:underline underline-offset-2">
                     {project.title}
                   </Link>
                 </h2>
@@ -212,7 +212,7 @@ export function ProjectsGrid({ projects, categories, totalCount, domainCount }: 
                   style={{ borderTop: '1px solid var(--border-subtle)' }}
                 >
                   <Link
-                    href={`/projects/${project.slug}`}
+                    href={`/projects/${project.slug}/`}
                     className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
                     style={{ color: CATEGORY_TEXT[project.category] || '#7C3AED' }}
                   >
