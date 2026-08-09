@@ -37,7 +37,7 @@ export function Navbar() {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 inset-x-0 z-50 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="fixed top-4 inset-x-0 z-50 container mx-auto px-4"
     >
       <nav
         className="glass-panel rounded-2xl px-5 py-3 flex items-center justify-between shadow-2xl relative"
@@ -66,17 +66,6 @@ export function Navbar() {
           </div>
           <span className="group-hover:text-accent-violet2 transition-colors font-mono" style={{ color: 'var(--text-primary)' }}>
             <span style={{ color: 'var(--text-secondary)' }}>rayhan</span><span style={{ color: 'var(--text-primary)' }}>shakib</span><span style={{ color: '#7C3AED' }}>.dev</span>
-          </span>
-          <span
-            className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md"
-            style={{
-              background: 'rgba(124,58,237,0.12)',
-              border: '1px solid rgba(124,58,237,0.25)',
-              color: '#7C3AED',
-              letterSpacing: '0.05em',
-            }}
-          >
-            v1.0.0
           </span>
         </Link>
 

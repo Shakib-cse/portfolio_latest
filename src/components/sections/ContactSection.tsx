@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Send, CheckCircle2, AlertCircle, Loader2,
-  Mail, Phone, Copy, Check, Github, Linkedin, Twitter, MapPin,
+  Mail, Phone, Copy, Check, Github, Linkedin, MapPin,
 } from 'lucide-react';
 import { resumeData } from '@/data/resume';
 
 const SOCIALS = [
   { Icon: Github,   label: 'GitHub',   href: resumeData.socials.github,   color: '#ffffff' },
   { Icon: Linkedin, label: 'LinkedIn', href: resumeData.socials.linkedin, color: '#0A66C2' },
-  { Icon: Twitter,  label: 'Twitter',  href: resumeData.socials.twitter,  color: '#1D9BF0' },
+  { Icon: Mail,     label: 'Email',    href: `mailto:${resumeData.socials.email}`, color: '#06B6D4' },
 ];
 
 export function ContactSection() {
@@ -65,7 +65,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-24 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-16 sm:py-20 container mx-auto px-4">
       {/* ── Hero Banner ── */}
       <div className="relative rounded-3xl overflow-hidden mb-10 p-10 sm:p-14 text-center">
         {/* Gradient BG */}

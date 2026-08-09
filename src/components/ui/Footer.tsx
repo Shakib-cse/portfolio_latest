@@ -1,22 +1,21 @@
 'use client';
 
 
-import { Github, Linkedin, Twitter, Mail, Zap } from 'lucide-react';
+import { Github, Linkedin, Mail, Zap } from 'lucide-react';
 import { resumeData } from '@/data/resume';
 
 const LINKS = [
-  { Icon: Github,   href: resumeData.socials.github,   label: 'GitHub',   color: '#9B5CF6' },
+  { Icon: Github, href: resumeData.socials.github, label: 'GitHub', color: '#9B5CF6' },
   { Icon: Linkedin, href: resumeData.socials.linkedin, label: 'LinkedIn', color: '#0A66C2' },
-  { Icon: Twitter,  href: resumeData.socials.twitter,  label: 'Twitter',  color: '#1D9BF0' },
-  { Icon: Mail,     href: `mailto:${resumeData.socials.email}`, label: 'Email', color: '#06B6D4' },
+  { Icon: Mail, href: `mailto:${resumeData.socials.email}`, label: 'Email', color: '#06B6D4' },
 ];
 
 const NAV_LINKS = [
-  { label: 'About',      href: '/#hero' },
+  { label: 'About', href: '/#hero' },
   { label: 'Experience', href: '/#experience' },
-  { label: 'Projects',   href: '/#projects' },
-  { label: 'Skills',     href: '/#skills' },
-  { label: 'Contact',    href: '/#contact' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Skills', href: '/#skills' },
+  { label: 'Contact', href: '/#contact' },
 ];
 
 export function Footer() {
@@ -34,7 +33,7 @@ export function Footer() {
         }}
       />
 
-      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="container mx-auto px-4 relative">
         {/* Top Row */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10">
           {/* Brand */}
@@ -98,16 +97,16 @@ export function Footer() {
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLAnchorElement;
                   el.style.borderColor = `${color}60`;
-                  el.style.color       = color;
-                  el.style.background  = `${color}12`;
-                  el.style.boxShadow   = `0 0 16px ${color}30`;
+                  el.style.color = color;
+                  el.style.background = `${color}12`;
+                  el.style.boxShadow = `0 0 16px ${color}30`;
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLAnchorElement;
                   el.style.borderColor = 'var(--border-subtle)';
-                  el.style.color       = 'var(--text-muted)';
-                  el.style.background  = 'rgba(124,58,237,0.08)';
-                  el.style.boxShadow   = 'none';
+                  el.style.color = 'var(--text-muted)';
+                  el.style.background = 'rgba(124,58,237,0.08)';
+                  el.style.boxShadow = 'none';
                 }}
               >
                 <Icon className="w-4 h-4" />
@@ -118,16 +117,30 @@ export function Footer() {
 
         {/* Bottom Row */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs font-mono"
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-xs font-mono"
           style={{ borderTop: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}
         >
-          <span>
-            © {new Date().getFullYear()}{' '}
-            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
-              {resumeData.name}
+          <div className="flex items-center gap-3">
+            <span>
+              © {new Date().getFullYear()}{' '}
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+                {resumeData.name}
+              </span>
+              . All rights reserved.
             </span>
-            . All rights reserved.
-          </span>
+            <span
+              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-mono text-[10px]"
+              style={{
+                background: 'rgba(124,58,237,0.1)',
+                border: '1px solid rgba(124,58,237,0.25)',
+                color: 'var(--accent-violet2)',
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              v1.1.0
+            </span>
+          </div>
+
           <span className="flex items-center gap-1.5">
             Built with{' '}
             <span style={{ color: 'var(--accent-violet2)' }}>Next.js</span>,{' '}

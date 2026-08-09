@@ -49,7 +49,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative pt-24 pb-6 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-screen max-h-screen flex flex-col justify-center"
+      className="relative pt-28 pb-12 container mx-auto px-4 min-h-screen flex flex-col justify-center"
     >
       {/* ── Background ambient orbs ── */}
       <div
@@ -67,13 +67,13 @@ export function HeroSection() {
         }}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 xl:gap-16 items-center w-full">
         {/* ═══ LEFT COLUMN — Text ═══ */}
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="max-w-2xl"
+          className="flex-1 w-full"
         >
           {/* Status Badge */}
           <motion.div variants={fadeUp} className="mb-4">
@@ -141,7 +141,7 @@ export function HeroSection() {
           {/* Bio */}
           <motion.p
             variants={fadeUp}
-            className="text-base sm:text-lg leading-relaxed mb-4 max-w-xl"
+            className="text-base sm:text-lg leading-relaxed mb-4 max-w-2xl"
             style={{ color: 'var(--text-secondary)' }}
           >
             {resumeData.bio}
