@@ -43,7 +43,7 @@ export function ProjectsSection() {
         </div>
 
         <Link
-          href="/projects"
+          href="/projects/"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 group/btn"
           style={{
             background: 'var(--bg-elevated)',
@@ -90,7 +90,7 @@ export function ProjectsSection() {
               <div className="relative overflow-hidden min-h-[240px] lg:min-h-0">
                 {featuredProject.imageUrl ? (
                   <Link
-                    href={`/projects/${featuredProject.slug}`}
+                    href={`/projects/${featuredProject.slug}/`}
                     prefetch={true}
                     className="block relative h-full min-h-[240px] overflow-hidden"
                   >
@@ -145,7 +145,7 @@ export function ProjectsSection() {
                     className="text-2xl sm:text-3xl font-extrabold mb-3 leading-tight transition-colors group-hover:text-accent-violet2"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    <Link href={`/projects/${featuredProject.slug}`} prefetch={true}>
+                    <Link href={`/projects/${featuredProject.slug}/`} prefetch={true}>
                       {featuredProject.title}
                     </Link>
                   </h3>
@@ -173,7 +173,7 @@ export function ProjectsSection() {
 
                 <div className="flex items-center gap-3 pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
                   <Link
-                    href={`/projects/${featuredProject.slug}`}
+                    href={`/projects/${featuredProject.slug}/`}
                     prefetch={true}
                     className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl text-white btn-gradient"
                   >
@@ -254,7 +254,7 @@ export function ProjectsSection() {
                 {/* Image */}
                 {project.imageUrl && (
                   <Link
-                    href={`/projects/${project.slug}`}
+                    href={`/projects/${project.slug}/`}
                     prefetch={true}
                     className="block relative overflow-hidden"
                     style={{ height: 180 }}
@@ -293,7 +293,7 @@ export function ProjectsSection() {
                   </div>
 
                   <h3 className="text-lg font-bold mb-2 leading-snug transition-colors group-hover:text-accent-violet2" style={{ color: 'var(--text-primary)' }}>
-                    <Link href={`/projects/${project.slug}`} prefetch={true}>
+                    <Link href={`/projects/${project.slug}/`} prefetch={true}>
                       {project.title}
                     </Link>
                   </h3>
@@ -323,7 +323,7 @@ export function ProjectsSection() {
                     style={{ borderTop: '1px solid var(--border-subtle)' }}
                   >
                     <Link
-                      href={`/projects/${project.slug}`}
+                      href={`/projects/${project.slug}/`}
                       prefetch={true}
                       className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
                       style={{ color: 'var(--accent-violet2)' }}
@@ -394,7 +394,7 @@ export function ProjectsSection() {
         className="flex justify-center"
       >
         <Link
-          href="/projects"
+          href="/projects/"
           className="inline-flex items-center gap-2.5 px-7 py-3 rounded-2xl text-sm font-bold transition-all group/cta"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(37,99,235,0.12))',
