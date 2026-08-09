@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 interface InteractiveCardProps {
   children: React.ReactNode;
@@ -10,37 +10,59 @@ interface InteractiveCardProps {
 
 export function InteractiveCard({ children, className = '', style }: InteractiveCardProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const [transform, setTransform] = useState('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
-  const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 });
-  const [isHovered, setIsHovered] = useState(false);
+  const spotlightRef = useRef<HTMLDivElement | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
 
-    const rotateX = ((y - centerY) / centerY) * -6; // Max 6 deg tilt
-    const rotateY = ((x - centerX) / centerX) * 6;  // Max 6 deg tilt
+    rafRef.current = requestAnimationFrame(() => {
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -4; // Max 4 deg tilt
+      const rotateY = ((x - centerX) / centerX) * 4;  // Max 4 deg tilt
 
-    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`);
-    setSpotlightPos({
-      x: Math.round((x / rect.width) * 100),
-      y: Math.round((y / rect.height) * 100),
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.01, 1.01, 1.01)`;
+      
+      if (spotlightRef.current) {
+        const posX = Math.round((x / rect.width) * 100);
+        const posY = Math.round((y / rect.height) * 100);
+        spotlightRef.current.style.background = `radial-gradient(500px circle at ${posX}% ${posY}%, rgba(124, 58, 237, 0.18), transparent 45%)`;
+      }
     });
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.1s ease-out';
+    }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+      cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -49,8 +71,6 @@ export function InteractiveCard({ children, className = '', style }: Interactive
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
-        transform,
-        transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
         transformStyle: 'preserve-3d',
         willChange: 'transform',
         ...style,
@@ -59,9 +79,10 @@ export function InteractiveCard({ children, className = '', style }: Interactive
     >
       {/* Interactive Cursor Spotlight Gradient Follower */}
       <div
-        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
+        ref={spotlightRef}
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
         style={{
-          background: `radial-gradient(600px circle at ${spotlightPos.x}% ${spotlightPos.y}%, rgba(124, 58, 237, 0.20), transparent 40%)`,
+          background: 'radial-gradient(500px circle at 50% 50%, rgba(124, 58, 237, 0.18), transparent 45%)',
         }}
       />
 
@@ -69,3 +90,4 @@ export function InteractiveCard({ children, className = '', style }: Interactive
     </div>
   );
 }
+

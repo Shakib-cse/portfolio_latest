@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ExternalLink, Lock, Loader2, Github } from 'lucide-react';
+import React from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { ArrowUpRight, ExternalLink, Lock, Github, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { resumeData } from '@/data/resume';
 import { InteractiveCard } from '@/components/ui/InteractiveCard';
-
-const categories = ['All', ...Array.from(new Set(resumeData.projects.map(p => p.category)))];
 
 const CATEGORY_COLORS: Record<string, string> = {
   'Marketplace':     'rgba(124,58,237,0.12)',
@@ -22,238 +21,351 @@ const CATEGORY_TEXT: Record<string, string> = {
 };
 
 export function ProjectsSection() {
-  const [activeTab, setActiveTab] = useState('All');
-  const [navigatingSlug, setNavigatingSlug] = useState<string | null>(null);
-
-  const filteredProjects = activeTab === 'All'
-    ? resumeData.projects
-    : resumeData.projects.filter(p => p.category === activeTab);
-
-  const featuredProject = filteredProjects[0];
-  const restProjects    = filteredProjects.slice(1);
+  // Sort projects strictly by sequence order (1, 2, 3...) and display the first 3 on the landing page
+  const sortedProjects = [...resumeData.projects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const featuredProjects = sortedProjects.slice(0, 3);
+  const featuredProject  = featuredProjects[0];
+  const restProjects     = featuredProjects.slice(1);
 
   return (
-    <section id="projects" className="py-24 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      {/* Loading Overlay */}
-      <AnimatePresence>
-        {navigatingSlug && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6"
-            style={{ background: 'rgba(5,7,15,0.85)', backdropFilter: 'blur(16px)' }}
-          >
-            <div
-              className="w-16 h-16 rounded-full border-4 mb-6"
-              style={{
-                borderColor: 'rgba(124,58,237,0.2)',
-                borderTopColor: '#7C3AED',
-                animation: 'spin 0.8s linear infinite',
-              }}
-            />
-            <span className="section-label block mb-2">Loading Case Study</span>
-            <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-              Preparing project details...
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+    <section id="projects" className="py-16 sm:py-20 container mx-auto px-4 relative">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
         <div>
-          <span className="section-label block mb-3">Featured Portfolio</span>
+          <span className="section-label block mb-2">Featured Portfolio</span>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
             Selected{' '}
             <span className="gradient-text">Projects</span>
           </h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+            A handful of highlights from my work — full case studies included.
+          </p>
         </div>
 
-        {/* Filter Tabs */}
-        <div
-          className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl"
-          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 group/btn"
+          style={{
+            background: 'var(--bg-elevated)',
+            border: '1px solid var(--border-medium)',
+            color: 'var(--text-secondary)',
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget;
+            el.style.borderColor = 'rgba(124,58,237,0.5)';
+            el.style.color = 'var(--accent-violet2)';
+            el.style.boxShadow = '0 0 20px rgba(124,58,237,0.15)';
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget;
+            el.style.borderColor = 'var(--border-medium)';
+            el.style.color = 'var(--text-secondary)';
+            el.style.boxShadow = 'none';
+          }}
         >
-          {categories.map(tab => {
-            const isActive = activeTab === tab;
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className="relative px-4 py-1.5 text-xs font-semibold rounded-xl transition-colors"
-                style={{ color: isActive ? '#fff' : 'var(--text-muted)' }}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeFilterTab"
-                    className="absolute inset-0 rounded-xl"
-                    style={{ background: 'linear-gradient(135deg, #7C3AED, #2563EB)' }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-                  />
-                )}
-                <span className="relative z-10">{tab}</span>
-              </button>
-            );
-          })}
-        </div>
+          <span>View All Projects</span>
+          <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+        </Link>
       </div>
 
-      <motion.div layout>
-        <AnimatePresence mode="popLayout">
-          {/* Featured Project — full width */}
-          {featuredProject && (
+      {/* Featured Project — full width */}
+      {featuredProject && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-6"
+        >
+          <InteractiveCard
+            className="rounded-3xl overflow-hidden group"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-subtle)',
+              backdropFilter: 'blur(24px)',
+            }}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[360px]">
+              {/* Image Side */}
+              <div className="relative overflow-hidden min-h-[240px] lg:min-h-0">
+                {featuredProject.imageUrl ? (
+                  <Link
+                    href={`/projects/${featuredProject.slug}`}
+                    prefetch={true}
+                    className="block relative h-full min-h-[240px] overflow-hidden"
+                  >
+                    <Image
+                      src={featuredProject.imageUrl}
+                      alt={featuredProject.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority={true}
+                      className="object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div
+                      className="absolute inset-0 z-10"
+                      style={{
+                        background: 'linear-gradient(to right, transparent 60%, var(--bg-card) 100%)',
+                      }}
+                    />
+                  </Link>
+                ) : (
+                  <div
+                    className="h-full min-h-[240px] flex items-center justify-center"
+                    style={{ background: 'var(--bg-elevated)' }}
+                  >
+                    <span style={{ color: 'var(--text-muted)', fontSize: '3rem' }}>🚀</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Content Side */}
+              <div className="p-8 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span
+                      className="text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-full"
+                      style={{
+                        background: CATEGORY_COLORS[featuredProject.category] || 'rgba(124,58,237,0.1)',
+                        color: CATEGORY_TEXT[featuredProject.category] || 'var(--accent-violet2)',
+                        border: `1px solid ${CATEGORY_TEXT[featuredProject.category] || 'var(--accent-violet2)'}30`,
+                      }}
+                    >
+                      {featuredProject.category}
+                    </span>
+                    <span
+                      className="text-xs font-mono font-semibold"
+                      style={{ color: 'var(--accent-emerald)' }}
+                    >
+                      ⚡ {featuredProject.metrics}
+                    </span>
+                  </div>
+
+                  <h3
+                    className="text-2xl sm:text-3xl font-extrabold mb-3 leading-tight transition-colors group-hover:text-accent-violet2"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    <Link href={`/projects/${featuredProject.slug}`} prefetch={true}>
+                      {featuredProject.title}
+                    </Link>
+                  </h3>
+
+                  <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>
+                    {featuredProject.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {featuredProject.techStack.map(tech => (
+                      <span
+                        key={tech}
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-lg font-medium"
+                        style={{
+                          background: 'var(--bg-elevated)',
+                          border: '1px solid var(--border-subtle)',
+                          color: 'var(--text-secondary)',
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                  <Link
+                    href={`/projects/${featuredProject.slug}`}
+                    prefetch={true}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl text-white btn-gradient"
+                  >
+                    <span>Case Study</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+
+                  {featuredProject.liveUrl && (
+                    <a
+                      href={featuredProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3.5 py-2 rounded-xl transition-all"
+                      style={{
+                        background: 'rgba(16,185,129,0.08)',
+                        border: '1px solid rgba(16,185,129,0.25)',
+                        color: 'var(--accent-emerald)',
+                      }}
+                    >
+                      <span>Live</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+
+                  {featuredProject.githubUrl ? (
+                    <a
+                      href={featuredProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 flex items-center justify-center rounded-xl transition-all"
+                      style={{
+                        background: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-subtle)',
+                        color: 'var(--text-muted)',
+                      }}
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <span
+                      className="inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1 rounded-full"
+                      style={{
+                        background: 'rgba(245,158,11,0.08)',
+                        border: '1px solid rgba(245,158,11,0.2)',
+                        color: 'var(--accent-gold)',
+                      }}
+                    >
+                      <Lock className="w-3 h-3" />
+                      <span>Private Repo</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </InteractiveCard>
+        </motion.div>
+      )}
+
+      {/* Rest of Featured Projects — 2-col grid */}
+      {restProjects.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {restProjects.map((project, idx) => (
             <motion.div
-              key={`featured-${featuredProject.id}`}
-              layout
+              key={project.id}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ type: 'spring', stiffness: 100, damping: 18 }}
-              className="mb-6"
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <InteractiveCard
-                className="rounded-3xl overflow-hidden group"
+                className="rounded-2xl overflow-hidden flex flex-col h-full group"
                 style={{
                   background: 'var(--bg-card)',
                   border: '1px solid var(--border-subtle)',
                   backdropFilter: 'blur(24px)',
                 }}
               >
-                <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[360px]">
-                  {/* Image Side */}
-                  <div className="relative overflow-hidden min-h-[240px] lg:min-h-0">
-                    {featuredProject.imageUrl ? (
-                      <Link
-                        href={`/projects/${featuredProject.slug}`}
-                        prefetch
-                        onClick={() => setNavigatingSlug(featuredProject.slug)}
-                        className="block h-full"
-                      >
-                        <img
-                          src={featuredProject.imageUrl}
-                          alt={featuredProject.title}
-                          className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
-                          style={{ minHeight: '240px' }}
-                        />
-                        <div
-                          className="absolute inset-0"
-                          style={{
-                            background: 'linear-gradient(to right, transparent 60%, var(--bg-card) 100%)',
-                          }}
-                        />
-                      </Link>
-                    ) : (
-                      <div
-                        className="h-full min-h-[240px] flex items-center justify-center"
-                        style={{ background: 'var(--bg-elevated)' }}
-                      >
-                        <span style={{ color: 'var(--text-muted)', fontSize: '3rem' }}>🚀</span>
-                      </div>
-                    )}
+                {/* Image */}
+                {project.imageUrl && (
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    prefetch={true}
+                    className="block relative overflow-hidden"
+                    style={{ height: 180 }}
+                  >
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover object-top transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div
+                      className="absolute inset-0 z-10"
+                      style={{
+                        background: 'linear-gradient(to top, var(--bg-card) 0%, transparent 50%)',
+                      }}
+                    />
+                  </Link>
+                )}
+
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span
+                      className="text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded-full"
+                      style={{
+                        background: CATEGORY_COLORS[project.category] || 'rgba(124,58,237,0.1)',
+                        color: CATEGORY_TEXT[project.category] || 'var(--accent-violet2)',
+                        border: `1px solid ${CATEGORY_TEXT[project.category] || 'var(--accent-violet2)'}30`,
+                      }}
+                    >
+                      {project.category}
+                    </span>
+                    <span className="text-xs font-mono" style={{ color: 'var(--accent-emerald)' }}>
+                      ⚡ {project.metrics}
+                    </span>
                   </div>
 
-                  {/* Content Side */}
-                  <div className="p-8 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span
-                          className="text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-full"
-                          style={{
-                            background: CATEGORY_COLORS[featuredProject.category] || 'rgba(124,58,237,0.1)',
-                            color: CATEGORY_TEXT[featuredProject.category] || 'var(--accent-violet2)',
-                            border: `1px solid ${CATEGORY_TEXT[featuredProject.category] || 'var(--accent-violet2)'}30`,
-                          }}
-                        >
-                          {featuredProject.category}
-                        </span>
-                        <span
-                          className="text-xs font-mono font-semibold"
-                          style={{ color: 'var(--accent-emerald)' }}
-                        >
-                          ⚡ {featuredProject.metrics}
-                        </span>
-                      </div>
+                  <h3 className="text-lg font-bold mb-2 leading-snug transition-colors group-hover:text-accent-violet2" style={{ color: 'var(--text-primary)' }}>
+                    <Link href={`/projects/${project.slug}`} prefetch={true}>
+                      {project.title}
+                    </Link>
+                  </h3>
 
-                      <h3
-                        className="text-2xl sm:text-3xl font-extrabold mb-3 leading-tight transition-colors group-hover:text-accent-violet2"
-                        style={{ color: 'var(--text-primary)' }}
+                  <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: 'var(--text-secondary)' }}>
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 mb-5">
+                    {project.techStack.map(tech => (
+                      <span
+                        key={tech}
+                        className="text-[11px] font-mono px-2 py-0.5 rounded-md"
+                        style={{
+                          background: 'var(--bg-elevated)',
+                          border: '1px solid var(--border-subtle)',
+                          color: 'var(--text-secondary)',
+                        }}
                       >
-                        <Link
-                          href={`/projects/${featuredProject.slug}`}
-                          prefetch
-                          onClick={() => setNavigatingSlug(featuredProject.slug)}
-                        >
-                          {featuredProject.title}
-                        </Link>
-                      </h3>
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
 
-                      <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>
-                        {featuredProject.description}
-                      </p>
+                  <div
+                    className="flex items-center justify-between pt-3"
+                    style={{ borderTop: '1px solid var(--border-subtle)' }}
+                  >
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      prefetch={true}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
+                      style={{ color: 'var(--accent-violet2)' }}
+                    >
+                      <span>Case Study</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
 
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {featuredProject.techStack.map(tech => (
-                          <span
-                            key={tech}
-                            className="text-[11px] font-mono px-2.5 py-1 rounded-lg font-medium"
-                            style={{
-                              background: 'var(--bg-elevated)',
-                              border: '1px solid var(--border-subtle)',
-                              color: 'var(--text-secondary)',
-                            }}
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                      <Link
-                        href={`/projects/${featuredProject.slug}`}
-                        prefetch
-                        onClick={() => setNavigatingSlug(featuredProject.slug)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl text-white btn-gradient"
-                      >
-                        <span>Case Study</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
-
-                      {featuredProject.liveUrl && (
+                    <div className="flex items-center gap-2">
+                      {project.liveUrl && (
                         <a
-                          href={featuredProject.liveUrl}
+                          href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3.5 py-2 rounded-xl transition-all"
+                          className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full transition-all hover:scale-105"
                           style={{
                             background: 'rgba(16,185,129,0.08)',
-                            border: '1px solid rgba(16,185,129,0.25)',
+                            border: '1px solid rgba(16,185,129,0.2)',
                             color: 'var(--accent-emerald)',
                           }}
                         >
                           <span>Live</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
+                          <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
-
-                      {featuredProject.githubUrl ? (
+                      {project.githubUrl ? (
                         <a
-                          href={featuredProject.githubUrl}
+                          href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-8 h-8 flex items-center justify-center rounded-xl transition-all"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg transition-all"
                           style={{
                             background: 'var(--bg-elevated)',
                             border: '1px solid var(--border-subtle)',
                             color: 'var(--text-muted)',
                           }}
                         >
-                          <Github className="w-4 h-4" />
+                          <Github className="w-3.5 h-3.5" />
                         </a>
                       ) : (
                         <span
-                          className="inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1 rounded-full"
+                          className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full"
                           style={{
                             background: 'rgba(245,158,11,0.08)',
                             border: '1px solid rgba(245,158,11,0.2)',
@@ -261,7 +373,7 @@ export function ProjectsSection() {
                           }}
                         >
                           <Lock className="w-3 h-3" />
-                          <span>Private Repo</span>
+                          <span>Private</span>
                         </span>
                       )}
                     </div>
@@ -269,172 +381,42 @@ export function ProjectsSection() {
                 </div>
               </InteractiveCard>
             </motion.div>
-          )}
+          ))}
+        </div>
+      )}
 
-          {/* Rest of Projects — 2-col grid */}
-          {restProjects.length > 0 && (
-            <motion.div
-              key="rest-grid"
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              {restProjects.map(project => {
-                const isNavigating = navigatingSlug === project.slug;
-                return (
-                  <motion.div
-                    layout
-                    key={project.id}
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.96 }}
-                    transition={{ type: 'spring', stiffness: 100, damping: 18 }}
-                  >
-                    <InteractiveCard
-                      className="rounded-2xl overflow-hidden flex flex-col h-full group"
-                      style={{
-                        background: 'var(--bg-card)',
-                        border: '1px solid var(--border-subtle)',
-                        backdropFilter: 'blur(24px)',
-                      }}
-                    >
-                      {/* Image */}
-                      {project.imageUrl && (
-                        <Link
-                          href={`/projects/${project.slug}`}
-                          prefetch
-                          onClick={() => setNavigatingSlug(project.slug)}
-                          className="block relative overflow-hidden"
-                          style={{ height: 180 }}
-                        >
-                          <img
-                            src={project.imageUrl}
-                            alt={project.title}
-                            className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-600"
-                          />
-                          <div
-                            className="absolute inset-0"
-                            style={{
-                              background: 'linear-gradient(to top, var(--bg-card) 0%, transparent 50%)',
-                            }}
-                          />
-                        </Link>
-                      )}
-
-                      <div className="p-6 flex flex-col flex-1">
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <span
-                            className="text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded-full"
-                            style={{
-                              background: CATEGORY_COLORS[project.category] || 'rgba(124,58,237,0.1)',
-                              color: CATEGORY_TEXT[project.category] || 'var(--accent-violet2)',
-                              border: `1px solid ${CATEGORY_TEXT[project.category] || 'var(--accent-violet2)'}30`,
-                            }}
-                          >
-                            {project.category}
-                          </span>
-                          <span className="text-xs font-mono" style={{ color: 'var(--accent-emerald)' }}>
-                            ⚡ {project.metrics}
-                          </span>
-                        </div>
-
-                        <h3 className="text-lg font-bold mb-2 leading-snug transition-colors group-hover:text-accent-violet2" style={{ color: 'var(--text-primary)' }}>
-                          <Link href={`/projects/${project.slug}`} prefetch onClick={() => setNavigatingSlug(project.slug)}>
-                            {project.title}
-                          </Link>
-                        </h3>
-
-                        <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: 'var(--text-secondary)' }}>
-                          {project.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-1.5 mb-5">
-                          {project.techStack.map(tech => (
-                            <span
-                              key={tech}
-                              className="text-[11px] font-mono px-2 py-0.5 rounded-md"
-                              style={{
-                                background: 'var(--bg-elevated)',
-                                border: '1px solid var(--border-subtle)',
-                                color: 'var(--text-secondary)',
-                              }}
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div
-                          className="flex items-center justify-between pt-3"
-                          style={{ borderTop: '1px solid var(--border-subtle)' }}
-                        >
-                          <Link
-                            href={`/projects/${project.slug}`}
-                            prefetch
-                            onClick={() => setNavigatingSlug(project.slug)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
-                            style={{ color: 'var(--accent-violet2)' }}
-                          >
-                            {isNavigating ? (
-                              <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Loading...</span></>
-                            ) : (
-                              <><span>Case Study</span><ArrowUpRight className="w-3.5 h-3.5" /></>
-                            )}
-                          </Link>
-
-                          <div className="flex items-center gap-2">
-                            {project.liveUrl && (
-                              <a
-                                href={project.liveUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full transition-all hover:scale-105"
-                                style={{
-                                  background: 'rgba(16,185,129,0.08)',
-                                  border: '1px solid rgba(16,185,129,0.2)',
-                                  color: 'var(--accent-emerald)',
-                                }}
-                              >
-                                <span>Live</span>
-                                <ExternalLink className="w-3 h-3" />
-                              </a>
-                            )}
-                            {project.githubUrl ? (
-                              <a
-                                href={project.githubUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-7 h-7 flex items-center justify-center rounded-lg transition-all"
-                                style={{
-                                  background: 'var(--bg-elevated)',
-                                  border: '1px solid var(--border-subtle)',
-                                  color: 'var(--text-muted)',
-                                }}
-                              >
-                                <Github className="w-3.5 h-3.5" />
-                              </a>
-                            ) : (
-                              <span
-                                className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full"
-                                style={{
-                                  background: 'rgba(245,158,11,0.08)',
-                                  border: '1px solid rgba(245,158,11,0.2)',
-                                  color: 'var(--accent-gold)',
-                                }}
-                              >
-                                <Lock className="w-3 h-3" />
-                                <span>Private</span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </InteractiveCard>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* View All CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="flex justify-center"
+      >
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-2.5 px-7 py-3 rounded-2xl text-sm font-bold transition-all group/cta"
+          style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(37,99,235,0.12))',
+            border: '1px solid rgba(124,58,237,0.3)',
+            color: 'var(--accent-violet2)',
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget;
+            el.style.background = 'linear-gradient(135deg, rgba(124,58,237,0.2), rgba(37,99,235,0.2))';
+            el.style.borderColor = 'rgba(124,58,237,0.6)';
+            el.style.boxShadow = '0 0 32px rgba(124,58,237,0.2)';
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget;
+            el.style.background = 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(37,99,235,0.12))';
+            el.style.borderColor = 'rgba(124,58,237,0.3)';
+            el.style.boxShadow = 'none';
+          }}
+        >
+          <span>View All Projects</span>
+          <ArrowRight className="w-4 h-4 transition-transform group-hover/cta:translate-x-1" />
+        </Link>
       </motion.div>
     </section>
   );
