@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, ExternalLink, Lock, Github, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { resumeData } from '@/data/resume';
-import { InteractiveCard } from '@/components/ui/InteractiveCard';
 
 const CATEGORY_COLORS: Record<string, string> = {
   'Marketplace':     'rgba(124,58,237,0.12)',
@@ -43,7 +42,7 @@ export function ProjectsSection() {
         </div>
 
         <Link
-          href="/projects/"
+          href="/projects"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shrink-0 group/btn"
           style={{
             background: 'var(--bg-elevated)',
@@ -66,9 +65,7 @@ export function ProjectsSection() {
           <span>View All Projects</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
         </Link>
-      </div>
-
-      {/* Featured Project — full width */}
+      </div>      {/* Featured Project — full width */}
       {featuredProject && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -77,8 +74,8 @@ export function ProjectsSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="mb-6"
         >
-          <InteractiveCard
-            className="rounded-3xl overflow-hidden group"
+          <div
+            className="rounded-3xl overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative z-10"
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
@@ -90,9 +87,8 @@ export function ProjectsSection() {
               <div className="relative overflow-hidden min-h-[240px] lg:min-h-0">
                 {featuredProject.imageUrl ? (
                   <Link
-                    href={`/projects/${featuredProject.slug}/`}
-                    prefetch={true}
-                    className="block relative h-full min-h-[240px] overflow-hidden"
+                    href={`/projects/${featuredProject.slug}`}
+                    className="block relative h-full min-h-[240px] overflow-hidden cursor-pointer"
                   >
                     <Image
                       src={featuredProject.imageUrl}
@@ -145,7 +141,7 @@ export function ProjectsSection() {
                     className="text-2xl sm:text-3xl font-extrabold mb-3 leading-tight transition-colors group-hover:text-accent-violet2"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    <Link href={`/projects/${featuredProject.slug}/`} prefetch={true}>
+                    <Link href={`/projects/${featuredProject.slug}`} className="hover:underline underline-offset-4 cursor-pointer">
                       {featuredProject.title}
                     </Link>
                   </h3>
@@ -173,9 +169,8 @@ export function ProjectsSection() {
 
                 <div className="flex items-center gap-3 pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
                   <Link
-                    href={`/projects/${featuredProject.slug}/`}
-                    prefetch={true}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl text-white btn-gradient"
+                    href={`/projects/${featuredProject.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl text-white btn-gradient cursor-pointer hover:opacity-90 transition-opacity"
                   >
                     <span>Case Study</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -186,7 +181,7 @@ export function ProjectsSection() {
                       href={featuredProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3.5 py-2 rounded-xl transition-all"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3.5 py-2 rounded-xl transition-all hover:scale-105"
                       style={{
                         background: 'rgba(16,185,129,0.08)',
                         border: '1px solid rgba(16,185,129,0.25)',
@@ -228,7 +223,7 @@ export function ProjectsSection() {
                 </div>
               </div>
             </div>
-          </InteractiveCard>
+          </div>
         </motion.div>
       )}
 
@@ -243,8 +238,8 @@ export function ProjectsSection() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <InteractiveCard
-                className="rounded-2xl overflow-hidden flex flex-col h-full group"
+              <div
+                className="rounded-2xl overflow-hidden flex flex-col h-full group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative z-10"
                 style={{
                   background: 'var(--bg-card)',
                   border: '1px solid var(--border-subtle)',
@@ -254,9 +249,8 @@ export function ProjectsSection() {
                 {/* Image */}
                 {project.imageUrl && (
                   <Link
-                    href={`/projects/${project.slug}/`}
-                    prefetch={true}
-                    className="block relative overflow-hidden"
+                    href={`/projects/${project.slug}`}
+                    className="block relative overflow-hidden cursor-pointer"
                     style={{ height: 180 }}
                   >
                     <Image
@@ -293,7 +287,7 @@ export function ProjectsSection() {
                   </div>
 
                   <h3 className="text-lg font-bold mb-2 leading-snug transition-colors group-hover:text-accent-violet2" style={{ color: 'var(--text-primary)' }}>
-                    <Link href={`/projects/${project.slug}/`} prefetch={true}>
+                    <Link href={`/projects/${project.slug}`} className="hover:underline underline-offset-2 cursor-pointer">
                       {project.title}
                     </Link>
                   </h3>
@@ -323,9 +317,8 @@ export function ProjectsSection() {
                     style={{ borderTop: '1px solid var(--border-subtle)' }}
                   >
                     <Link
-                      href={`/projects/${project.slug}/`}
-                      prefetch={true}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
+                      href={`/projects/${project.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer hover:underline"
                       style={{ color: 'var(--accent-violet2)' }}
                     >
                       <span>Case Study</span>
@@ -373,13 +366,13 @@ export function ProjectsSection() {
                           }}
                         >
                           <Lock className="w-3 h-3" />
-                          <span>Private</span>
+                          <span>Private Repo</span>
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
-              </InteractiveCard>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -394,7 +387,7 @@ export function ProjectsSection() {
         className="flex justify-center"
       >
         <Link
-          href="/projects/"
+          href="/projects"
           className="inline-flex items-center gap-2.5 px-7 py-3 rounded-2xl text-sm font-bold transition-all group/cta"
           style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(37,99,235,0.12))',
