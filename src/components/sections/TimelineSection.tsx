@@ -169,7 +169,7 @@ function ExperienceCard({ exp, index }: { exp: typeof resumeData.experiences[0];
 
 export function TimelineSection() {
   return (
-    <section id="experience" className="py-24 container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="experience" className="py-16 sm:py-20 container mx-auto px-4">
       {/* Section Header */}
       <div className="mb-16">
         <span className="section-label block mb-3">Career Path & Metrics</span>

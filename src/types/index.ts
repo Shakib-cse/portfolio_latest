@@ -35,8 +35,15 @@ export interface CaseStudyData {
   keyLearnings: string[];
 }
 
+export interface ProjectScreen {
+  title: string;
+  imageUrl: string;
+  description?: string;
+}
+
 export interface ProjectItem {
   id: string;
+  order?: number; // 1, 2, 3... sequence order for landing page and portfolio
   slug: string;
   title: string;
   description: string;
@@ -45,6 +52,7 @@ export interface ProjectItem {
   metrics: string;
   techStack: string[];
   imageUrl?: string;
+  screens?: ProjectScreen[];
   githubUrl?: string; // Omit or leave empty if repository is private
   liveUrl?: string;
   caseStudy: CaseStudyData;
